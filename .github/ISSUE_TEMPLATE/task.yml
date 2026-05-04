@@ -1,0 +1,174 @@
+name: Project task
+description: Create a project ticket using the standard backlog format.
+title: "TXX - "
+labels:
+  - area:project
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for planned work: architecture, automation, network, monitoring, validation, documentation, or delivery.
+
+  - type: input
+    id: ticket_id
+    attributes:
+      label: Ticket ID
+      description: Example: T24
+      placeholder: TXX
+    validations:
+      required: true
+
+  - type: dropdown
+    id: epic
+    attributes:
+      label: Epic
+      options:
+        - E0 - Pilotage & Architecture
+        - E1 - GitOps & IaC Foundation
+        - E2 - Proxmox & Base Platform
+        - E3 - Network, VPN & Firewall
+        - E4 - Services & Automation
+        - E5 - Monitoring & Security
+        - E6 - Tests & Validation
+        - E7 - Documentation & Final Delivery
+    validations:
+      required: true
+
+  - type: dropdown
+    id: follow_up
+    attributes:
+      label: Suggested Follow-up
+      options:
+        - FW1
+        - FW2
+        - FW3
+        - Final
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - architecture
+        - automation
+        - network
+        - monitoring
+        - security
+        - docs
+        - project
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - P0
+        - P1
+        - P2
+    validations:
+      required: true
+
+  - type: input
+    id: estimate
+    attributes:
+      label: Estimate
+      placeholder: "4h"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: risk
+    attributes:
+      label: Risk
+      options:
+        - Low
+        - Medium
+        - High
+    validations:
+      required: true
+
+  - type: input
+    id: depends_on
+    attributes:
+      label: Depends on
+      placeholder: "T01, T02 or -"
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Why this task exists.
+      value: |
+        - 
+        - 
+    validations:
+      required: true
+
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: What must be delivered.
+      value: |
+        - Deliver:
+        - Keep the result aligned with security, reproducibility, and evidence expectations.
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      value: |
+        - In scope:
+        - Out of scope:
+    validations:
+      required: true
+
+  - type: textarea
+    id: technical_expectations
+    attributes:
+      label: Technical Expectations
+      value: |
+        - 
+        - 
+        - 
+    validations:
+      required: true
+
+  - type: textarea
+    id: definition_of_done
+    attributes:
+      label: Definition Of Done
+      value: |
+        - 
+        - Code, configuration, or documentation changes are committed in the appropriate repository location.
+        - Related project documentation is updated if architecture, flows, or operations change.
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence_expected
+    attributes:
+      label: Evidence Expected
+      value: |
+        - Versioned code, config, ADR, runbook, diagram, or technical note.
+        - Validation output, screenshot, or replayable command sequence.
+        - Explicit rationale for the selected design if relevant.
+    validations:
+      required: true
+
+  - type: textarea
+    id: risks_notes
+    attributes:
+      label: Risks / Notes
+      value: |
+        - If dependencies are incomplete, document the blocker instead of bypassing it.
+    validations:
+      required: false

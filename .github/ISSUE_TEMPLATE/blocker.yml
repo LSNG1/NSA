@@ -1,0 +1,74 @@
+name: Risk or blocker
+description: Track a risk, blocker, dependency, or decision needed before delivery.
+title: "BLOCKER - "
+labels:
+  - area:project
+body:
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - Low
+        - Medium
+        - High
+        - Critical
+    validations:
+      required: true
+
+  - type: dropdown
+    id: follow_up
+    attributes:
+      label: Follow-up impacted
+      options:
+        - FW1
+        - FW2
+        - FW3
+        - Final
+    validations:
+      required: true
+
+  - type: input
+    id: owner
+    attributes:
+      label: Owner
+      placeholder: GitHub username or team member
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What is blocked or risky?
+      value: |
+        - 
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact
+      description: What happens if this is not resolved?
+      value: |
+        - 
+    validations:
+      required: true
+
+  - type: textarea
+    id: mitigation
+    attributes:
+      label: Mitigation / next action
+      value: |
+        - 
+    validations:
+      required: true
+
+  - type: input
+    id: due_date
+    attributes:
+      label: Needed by
+      placeholder: "YYYY-MM-DD or follow-up name"
+    validations:
+      required: false
