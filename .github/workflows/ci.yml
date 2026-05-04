@@ -1,0 +1,60 @@
+name: CI Validation
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+
+  check-secrets:
+    name: Check no secrets committed
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check for .pem files
+        run: |
+          if find . -name "*.pem" | grep -q .; then
+            echo "ERROR: .pem files found in repo"
+            exit 1
+          fi
+      - name: Check for .tf secret files
+        run: |
+          if find . -name "*.tfvars" | grep -q .; then
+            echo "ERROR: .tfvars files found in repo"
+            exit 1
+          fi
+
+  ansible-syntax:
+    name: Ansible syntax check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Ansible
+        run: pip install ansible ansible-lint
+      - name: Syntax check all playbooks
+        run: |
+          for playbook in ansible/playbooks/*.yml; do
+            echo "Checking $playbook..."
+            ansible-playbook --syntax-check -i ansible/inventory/hosts.ini "$playbook"
+          done
+
+  terraform-check:
+    name: Terraform validate recursive
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@v1
+      - name: Tofu init and validate site1
+        run: |
+          cd terraform/site1
+          tofu init -backend=false
+          tofu validate
+      - name: Tofu init and validate site2
+        run: |
+          cd terraform/site2
+          tofu init -backend=false
+          tofu validate
+EOF
