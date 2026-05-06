@@ -13,18 +13,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Check for .pem files
+
+      - name: Check for secret files
         run: |
-          if find . -name "*.pem" | grep -q .; then
-            echo "ERROR: .pem files found in repo"
+          FORBIDDEN=$(find . \
+            -name "*.tfvars" \
+            -o -name "*.pem" \
+            -o -name "*.key" \
+            -o -name "id_rsa" \
+            -o -name "id_ed25519" \
+            -o -name "*.p12" \
+            -o -name "*.pfx" \
+            -o -name "vault_pass.txt" \
+            -o -name "terraform.tfstate" \
+            -o -name "terraform.tfstate.backup" \
+            -o -name ".env" \
+            | grep -v ".git")
+          if [ -n "$FORBIDDEN" ]; then
+            echo "ERROR: fichiers sensibles détectés :"
+            echo "$FORBIDDEN"
             exit 1
           fi
-      - name: Check for .tf secret files
-        run: |
-          if find . -name "*.tfvars" | grep -q .; then
-            echo "ERROR: .tfvars files found in repo"
-            exit 1
-          fi
+          echo "OK - aucun fichier sensible trouvé"
 
   ansible-syntax:
     name: Ansible syntax check
@@ -33,28 +43,28 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install Ansible
         run: pip install ansible ansible-lint
-      - name: Syntax check all playbooks
+      - name: Syntax check playbooks
         run: |
           for playbook in ansible/playbooks/*.yml; do
             echo "Checking $playbook..."
-            ansible-playbook --syntax-check -i ansible/inventory/hosts.ini "$playbook"
+            ansible-playbook --syntax-check \
+              -i ansible/inventory/hosts.ini "$playbook"
           done
 
   terraform-check:
-    name: Terraform validate recursive
+    name: OpenTofu validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Setup OpenTofu
         uses: opentofu/setup-opentofu@v1
-      - name: Tofu init and validate site1
+      - name: Validate site1
         run: |
           cd terraform/site1
           tofu init -backend=false
           tofu validate
-      - name: Tofu init and validate site2
+      - name: Validate site2
         run: |
           cd terraform/site2
           tofu init -backend=false
           tofu validate
-EOF
