@@ -1,0 +1,18 @@
+# Applied to /etc/ssh/sshd_config.d/*.conf
+
+Port 22
+PermitRootLogin no
+PasswordAuthentication yes
+PubkeyAuthentication yes
+AllowUsers par1-admin
+MaxAuthTries 3
+LoginGraceTime 30
+ChallengeResponseAuthentication no
+KbdInteractiveAuthentication no
+X11Forwarding no
+AllowAgentForwarding no
+AllowTcpForwarding yes
+PermitTunnel no
+LogLevel VERBOSE
+ClientAliveInterval 300
+ClientAliveCountMax 2
